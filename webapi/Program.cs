@@ -7,7 +7,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.CustomSchemaIds(type => type.FullName);
+});
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(option =>
@@ -19,7 +22,9 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     });
 
 builder.Services.AddDbContext<DatabaseContext>(option =>
-    option.UseSqlite(builder.Configuration.GetConnectionString("Database")));
+    option.UseNpgsql(builder.Configuration.GetConnectionString("Database"))
+    //option.UseSqlite(builder.Configuration.GetConnectionString("Database"))
+);
 
 var app = builder.Build();
 
@@ -41,5 +46,7 @@ app.UseAuthorization();
 app.UseAuthorization();
 
 app.MapControllers();
+if (!app.Environment.IsDevelopment())
+    app.MapFallbackToFile("/index.html");
 
 app.Run();

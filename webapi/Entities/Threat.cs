@@ -11,8 +11,9 @@ namespace webapi.Entities
         [ForeignKey(nameof(Type))]
         public int TypeId { get; set; }
         public ThreatsType Type { get; set; }
-        [Required, MaxLength(500)]
-        public string Address { get; set; }
+        [ForeignKey(nameof(Microdistrict))]
+        public int MicrodistrictId { get; set; }
+        public Microdistrict Microdistrict { get; set; }
         [Required]
         public DateTime DateTime { get; set; }
         [ForeignKey(nameof(Source))]

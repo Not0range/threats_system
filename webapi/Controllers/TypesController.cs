@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 using webapi.Entities;
-using webapi.Models;
+using webapi.Models.Input;
+using Optional = webapi.Models.Input.Optional;
 
 namespace webapi.Controllers
 {
@@ -17,19 +17,16 @@ namespace webapi.Controllers
         [HttpGet]
         public IEnumerable<ThreatsType> GetList()
         {
-            return _ctx.ThreatsTypes.AsEnumerable();
+            return _ctx.ThreatsTypes.OrderBy(t => t.Level).AsEnumerable();
         }
 
         [HttpPut, Authorize(Roles = "0")]
         public async Task<ActionResult<ThreatsType>> Add(ThreatsTypeModel model)
         {
-            if (string.IsNullOrWhiteSpace(model.Title) || !model.Level.HasValue)
-                return BadRequest();
-
             var type = new ThreatsType
             {
                 Title = model.Title,
-                Level = model.Level.Value
+                Level = model.Level
             };
             await _ctx.ThreatsTypes.AddAsync(type);
             await _ctx.SaveChangesAsync();
@@ -37,7 +34,7 @@ namespace webapi.Controllers
         }
 
         [HttpPost("{id}"), Authorize(Roles = "0")]
-        public async Task<ActionResult<ThreatsType>> Edit(int id, ThreatsTypeModel model)
+        public async Task<ActionResult<ThreatsType>> Edit(int id, Optional.ThreatsTypeModel model)
         {
             var type = await _ctx.ThreatsTypes.FirstOrDefaultAsync(t => t.Id == id);
             if (type == null) return NotFound();

@@ -11,3 +11,14 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+:root {
+  overflow-x: hidden;
+  --summary-color0: rgb(15, 44, 139);
+  --summary-color1: rgb(32, 75, 69);
+  --summary-color2: rgb(133, 43, 28);
+  --summary-color3: rgb(180, 158, 34);
+  --active-color: rgb(29, 206, 1);
+  --active-color2: rgb(24, 175, 1);
+  --pushed-color: rgb(20, 148, 0);
+}

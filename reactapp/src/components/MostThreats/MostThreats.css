@@ -1,0 +1,144 @@
+.most-threats-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.most-threat-elem {
+    display: flex;
+    flex-direction: column;
+    margin: 5px;
+    padding: 15px;
+    border-radius: 10px;
+    align-items: center;
+    cursor: default;
+    user-select: none;
+}
+
+.summary-elem0 {
+    animation: summary-elem-anim0-r 300ms both;
+}
+
+.summary-elem0:hover {
+    animation: summary-elem-anim0 300ms both;
+}
+
+@keyframes summary-elem-anim0 {
+    from {
+        color: var(--summary-color0);
+        background-color: transparent;
+    }
+
+    to {
+        color: white;
+        background-color: var(--summary-color0);
+    }
+}
+
+@keyframes summary-elem-anim0-r {
+    from {
+        color: white;
+        background-color: var(--summary-color0);
+    }
+
+    to {
+        color: var(--summary-color0);
+        background-color: transparent;
+    }
+}
+
+.summary-elem1 {
+    animation: summary-elem-anim1-r 300ms both;
+}
+
+.summary-elem1:hover {
+    animation: summary-elem-anim1 300ms both;
+}
+
+@keyframes summary-elem-anim1 {
+    from {
+        color: var(--summary-color1);
+        background-color: transparent;
+    }
+
+    to {
+        color: white;
+        background-color: var(--summary-color1);
+    }
+}
+
+@keyframes summary-elem-anim1-r {
+    from {
+        color: white;
+        background-color: var(--summary-color1);
+    }
+
+    to {
+        color: var(--summary-color1);
+        background-color: transparent;
+    }
+}
+
+.summary-elem2 {
+    animation: summary-elem-anim2-r 300ms both;
+}
+
+.summary-elem2:hover {
+    animation: summary-elem-anim2 300ms both;
+}
+
+@keyframes summary-elem-anim2 {
+    from {
+        color: var(--summary-color2);
+        background-color: transparent;
+    }
+
+    to {
+        color: white;
+        background-color: var(--summary-color2);
+    }
+}
+
+@keyframes summary-elem-anim2-r {
+    from {
+        color: white;
+        background-color: var(--summary-color2);
+    }
+
+    to {
+        color: var(--summary-color2);
+        background-color: transparent;
+    }
+}
+
+.summary-elem3 {
+    animation: summary-elem-anim3-r 300ms both;
+}
+
+.summary-elem3:hover {
+    animation: summary-elem-anim3 300ms both;
+}
+
+@keyframes summary-elem-anim3 {
+    from {
+        color: var(--summary-color3);
+        background-color: transparent;
+    }
+
+    to {
+        color: white;
+        background-color: var(--summary-color3);
+    }
+}
+
+@keyframes summary-elem-anim3-r {
+    from {
+        color: white;
+        background-color: var(--summary-color3);
+    }
+
+    to {
+        color: var(--summary-color3);
+        background-color: transparent;
+    }
+}

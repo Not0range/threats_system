@@ -1,0 +1,9 @@
+.map-section {
+    display: flex;
+    flex-direction: row;
+    padding: 0 10px 0 10px;
+}
+
+.map-section>div {
+    width: 50%;
+}

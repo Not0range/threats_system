@@ -1,0 +1,14 @@
+.login-button {
+    border-radius: 5px;
+    user-select: none;
+    padding: 5px 10px;
+    background-color: var(--active-color);
+}
+
+.login-button:hover {
+    background-color: var(--active-color2);
+}
+
+.login-button-pushed {
+    background-color: var(--pushed-color) !important;
+}

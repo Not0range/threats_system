@@ -27,4 +27,8 @@
     <None Include="D:\Projects\Visual Studio\ThreatsSystem\webapi\.editorconfig" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="InitialData\" />
+  </ItemGroup>
+
 </Project>

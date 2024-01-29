@@ -25,6 +25,7 @@ builder.Services.AddDbContext<DatabaseContext>(option =>
     option.UseNpgsql(builder.Configuration.GetConnectionString("Database"))
     //option.UseSqlite(builder.Configuration.GetConnectionString("Database"))
 );
+builder.Services.AddLogging();
 
 var app = builder.Build();
 

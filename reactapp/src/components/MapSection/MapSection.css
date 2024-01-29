@@ -1,0 +1,9 @@
+.map-section-container {
+    
+}
+
+.map-section-container>object {
+    object-fit: contain;
+    width: 100%;
+    height: 100%;
+}

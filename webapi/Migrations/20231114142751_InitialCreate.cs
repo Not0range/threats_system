@@ -92,7 +92,7 @@ namespace webapi.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Microdisstricts",
+                name: "Microdistricts",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
@@ -103,9 +103,9 @@ namespace webapi.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Microdisstricts", x => x.Id);
+                    table.PrimaryKey("PK_Microdistricts", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Microdisstricts_Cities_CityId",
+                        name: "FK_Microdistricts_Cities_CityId",
                         column: x => x.CityId,
                         principalTable: "Cities",
                         principalColumn: "Id",
@@ -127,9 +127,9 @@ namespace webapi.Migrations
                 {
                     table.PrimaryKey("PK_Threats", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Threats_Microdisstricts_MicrodistrictId",
+                        name: "FK_Threats_Microdistricts_MicrodistrictId",
                         column: x => x.MicrodistrictId,
-                        principalTable: "Microdisstricts",
+                        principalTable: "Microdistricts",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -151,8 +151,8 @@ namespace webapi.Migrations
                 column: "DistrictId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Microdisstricts_CityId",
-                table: "Microdisstricts",
+                name: "IX_Microdistricts_CityId",
+                table: "Microdistricts",
                 column: "CityId");
 
             migrationBuilder.CreateIndex(
@@ -181,7 +181,7 @@ namespace webapi.Migrations
                 name: "Users");
 
             migrationBuilder.DropTable(
-                name: "Microdisstricts");
+                name: "Microdistricts");
 
             migrationBuilder.DropTable(
                 name: "Sources");

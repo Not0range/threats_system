@@ -1,0 +1,20 @@
+.page-control-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    font-size: 1.25rem;
+}
+
+.page-control-button {
+    padding: 15px;
+    font-size: 1.25rem;
+    border: 1px solid black;
+    border-radius: 15px;
+    cursor: pointer;
+    user-select: none;
+}
+
+.page-control-button:hover {
+    border-radius: 5px;
+}

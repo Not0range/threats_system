@@ -1,7 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 using System.Diagnostics.CodeAnalysis;
+using System.Security.Cryptography;
+using System.Text;
+using System.Text.RegularExpressions;
+
 using webapi.Entities;
 using webapi.Models.Input;
 using webapi.Models.Output;
@@ -12,7 +17,11 @@ namespace webapi.Controllers
     [ApiController]
     public class CalculationsController : ApiBase
     {
-        public CalculationsController(DatabaseContext context) : base(context) { }
+        private readonly ILogger _logger;
+        public CalculationsController(DatabaseContext context, ILogger<CalculationsController> logger) : base(context)
+        {
+            _logger = logger;
+        }
 
         [HttpGet("[action]")]
         public async Task<ActionResult<IEnumerable<DistrictInfo>>> Places()
@@ -147,6 +156,93 @@ namespace webapi.Controllers
                     Values = t.Values.Union(zeroValues, comparer).OrderBy(t => t.Key)
                 })
             };
+        }
+
+        [HttpGet("[action]")]
+        public async Task<ActionResult> GenerateData()
+        {
+            if (await _ctx.Users.AnyAsync()) return BadRequest();
+
+            var sha = SHA256.Create();
+            var stream = new MemoryStream(Encoding.UTF8.GetBytes("admin1"));
+            var hash = await sha.ComputeHashAsync(stream);
+            stream.Close();
+
+            await _ctx.Users.AddAsync(new User
+            {
+                Username = "admin1",
+                Password = hash
+            });
+            await _ctx.SaveChangesAsync();
+            _logger.LogWarning("User added");
+
+            var dir = new DirectoryInfo(@"InitialData\Districts");
+            await _ctx.Districts.AddRangeAsync(dir.GetFiles()
+                .Select(t => new District
+                {
+                    Title = Regex.Match(t.Name, @"^\d\.(.+)\.txt$").Groups[1].Value,
+                    SvgTag = ""
+                }));
+            await _ctx.SaveChangesAsync();
+            _logger.LogWarning("Districts added");
+
+            foreach (var file in dir.GetFiles())
+            {
+                await _ctx.Cities.AddRangeAsync((await System.IO.File.ReadAllLinesAsync(file.FullName)).Select(t => new City
+                {
+                    DistrictId = int.Parse(file.Name.Substring(0, file.Name.IndexOf("."))),
+                    Title = t,
+                    SvgTag = ""
+                }));
+            }
+            await _ctx.SaveChangesAsync();
+            _logger.LogWarning("Cities added");
+
+            var c = 1;
+            foreach (var file in dir.GetFiles())
+            {
+                await _ctx.Microdistricts.AddRangeAsync((await System.IO.File.ReadAllLinesAsync(file.FullName)).Select(t => new Microdistrict
+                {
+                    CityId = c++,
+                    Title = t,
+                    SvgTag = ""
+                }));
+            }
+            await _ctx.SaveChangesAsync();
+            _logger.LogWarning("Microdistricts added");
+
+            await _ctx.ThreatsTypes.AddRangeAsync((await System.IO.File.ReadAllLinesAsync(@"InitialData\types.txt")).Select(t => new ThreatsType
+            {
+                Title = t.Split('\t')[0],
+                Level = int.Parse(t.Split('\t')[1]),
+            }));
+            await _ctx.SaveChangesAsync();
+            _logger.LogWarning("Types added");
+
+            var today = DateTime.Today;
+            var temp = new DateTime(today.Year, today.Month, 1).AddDays(-1);
+            var end = new DateTimeOffset(temp).ToUniversalTime();
+            var begin = end.AddYears(-1);
+
+            var rand = new Random();
+            while (begin < end)
+            {
+                var p = rand.Next(5, 20);
+
+                for (int i = 0; i < p; i++)
+                {
+                    await _ctx.Threats.AddAsync(new Threat
+                    {
+                        DateTime = begin.AddHours(rand.Next(24)).AddMinutes(rand.Next(60)),
+                        MicrodistrictId = rand.Next(1, c),
+                        TypeId = rand.Next(1, 7)
+                    });
+                }
+                await _ctx.SaveChangesAsync();
+                begin = begin.AddDays(1);
+            }
+
+            return Ok();
         }
     }
 

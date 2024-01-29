@@ -1,25 +1,32 @@
 import $ from 'jquery';
-import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from '../../store/Store';
-import { setCurrentUser } from '../../store/MainSlice';
 import './Header.css';
-import HeaderButton from '../HeaderButton/HeaderButton';
+import HeaderButton from '../MainButton/MainButton';
+import { Link, useNavigate } from 'react-router-dom';
+import { setCurrentUser } from '../../store/MainSlice';
 
 export default function Header() {
+    const navigate = useNavigate();
     const user = useAppSelector(state => state.main.currentUser);
     const dispatch = useAppDispatch();
 
-    useEffect(() => {
-        $.ajax('api/account/check', {
+    const doLogout = () => {
+        $.ajax('/api/Account/Logout', {
             method: 'GET',
-            success: result => {
-                dispatch(setCurrentUser(result));
+            success: () => {
+                dispatch(setCurrentUser(undefined));
+                navigate('/');
             }
-        });
-    }, []);
+        })
+    };
+
     return (
         <div className='main-header'>
-            <HeaderButton text='Вход' />
+            <Link to={'/'}><img src='/logo192.png' /></Link>
+            <div style={{flexGrow: 1}} />
+            <h3>Здравствуйте, {user?.username}</h3>
+            <HeaderButton text='Панель управления' onClick={() => navigate('admin')} />
+            <HeaderButton text='Выход' onClick={doLogout} />
         </div>
     )
 }

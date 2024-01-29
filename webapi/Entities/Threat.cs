@@ -15,7 +15,7 @@ namespace webapi.Entities
         public int MicrodistrictId { get; set; }
         public Microdistrict Microdistrict { get; set; }
         [Required]
-        public DateTime DateTime { get; set; }
+        public DateTimeOffset DateTime { get; set; }
         [ForeignKey(nameof(Source))]
         public int? SourceId { get; set; }
         public Source Source { get; set; }

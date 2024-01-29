@@ -1,19 +1,19 @@
 export interface DistrictInfo {
     id: number;
-    title: SVGStringList;
-    svgTaag: string;
+    title: string;
+    svgTag: string;
     cities: CityInfo[];
 }
 
 export interface CityInfo {
     id: number;
-    title: SVGStringList;
-    svgTaag: string;
-    microdisstricts: MicrodistrictInfo[];
+    title: string;
+    svgTag: string;
+    microdistricts: MicrodistrictInfo[];
 }
 
 export interface MicrodistrictInfo {
     id: number;
-    title: SVGStringList;
-    svgTaag: string;
+    title: string;
+    svgTag: string;
 }

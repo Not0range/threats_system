@@ -1,0 +1,49 @@
+.text-input {}
+
+.text-input>input {
+    width: calc(100% - 15px);
+    outline: none;
+    padding: 5px 5px;
+    box-shadow: 2px 2px 2px rgba(128, 128, 128, 0.75);
+}
+
+.text-input>p {
+    width: fit-content;
+    cursor: text;
+    user-select: none;
+    position: relative;
+    animation: text-input-anim-r 200ms both;
+    margin: 0;
+}
+
+.text-input>p.placeholder-focused {
+    animation: text-input-anim 200ms both;
+}
+
+.text-input>.error {
+    border: 2px solid red;
+}
+
+@keyframes text-input-anim {
+    from {
+        top: -1.7em;
+        left: 10px;
+    }
+
+    to {
+        top: -3.2em;
+        left: 0px;
+    }
+}
+
+@keyframes text-input-anim-r {
+    from {
+        top: -3.2em;
+        left: 0px;
+    }
+
+    to {
+        top: -1.7em;
+        left: 10px;
+    }
+}

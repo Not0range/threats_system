@@ -7,6 +7,7 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import MainRoute from './routes/main/MainRoute';
+import AdminRoute from './routes/admin/AdminRoute';
 
 const router = createBrowserRouter([{
   path: '/',
@@ -16,10 +17,10 @@ const router = createBrowserRouter([{
       index: true,
       element: <MainRoute />
     },
-    // {
-    //   path: 'admin',
-    //   element: <AdminRoute />
-    // }
+    {
+      path: 'admin',
+      element: <AdminRoute />
+    }
   ]
 }]);
 

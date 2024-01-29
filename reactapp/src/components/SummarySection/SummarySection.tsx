@@ -66,7 +66,9 @@ export default function SummarySection() {
                         '#ff7300',
                         '#a4de6c',
                         '#f23805',
-                        '#f205ea']} />
+                        '#f205ea']}
+                    legendVisible={false}
+                />
             </div>
             <div className='chart-container'>
                 <SplineDataChart

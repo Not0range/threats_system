@@ -15,17 +15,28 @@ namespace webapi.Controllers
         public ThreatsController(DatabaseContext context) : base(context) { }
 
         [HttpGet]
-        public IEnumerable<ThreatInfo> GetList(int page = 1, int count = 20)
+        public async Task<Pagination<ThreatInfo>> GetList(int page = 1, int count = 20)
         {
-            return ToOutput(_ctx.Threats.AsNoTracking().OrderByDescending(t => t.DateTime)
+            var threats = _ctx.Threats.AsNoTracking();
+            var total = await threats.CountAsync();
+            var result = ToOutput(threats.OrderByDescending(t => t.DateTime)
                 .Skip((page - 1) * count).Take(count)).AsEnumerable();
+
+            return new Pagination<ThreatInfo>
+            {
+                Result = result,
+                CurrentPage = page,
+                TotalPages = (int)Math.Ceiling(total / (double)count),
+                Count = count,
+                TotalCount = total
+            };
         }
 
         [HttpPut, Authorize(Roles = "0,1")]
         public async Task<ActionResult<ThreatInfo>> Add(ThreatModel model)
         {
             Source source = null;
-            if (!string.IsNullOrWhiteSpace(model.Name) || !string.IsNullOrWhiteSpace(model.Phone) || 
+            if (!string.IsNullOrWhiteSpace(model.Name) || !string.IsNullOrWhiteSpace(model.Phone) ||
                 !string.IsNullOrWhiteSpace(model.Address))
             {
                 source = await _ctx.Sources.FirstOrDefaultAsync(t => (t.Address == null || t.Address == model.Address) &&
@@ -43,7 +54,7 @@ namespace webapi.Controllers
                 }
             }
 
-            if (!await _ctx.ThreatsTypes.AnyAsync(t => t.Id == model.TypeId) || 
+            if (!await _ctx.ThreatsTypes.AnyAsync(t => t.Id == model.TypeId) ||
                 !await _ctx.Microdistricts.AnyAsync(t => t.Id == model.MicrodistrictId)) return BadRequest();
 
             var threat = new Threat
@@ -76,7 +87,7 @@ namespace webapi.Controllers
             {
                 Id = t.Id,
                 Type = t.Type,
-                DateTime = t.DateTime,
+                DateTime = t.DateTime.DateTime,
                 Source = t.Source,
                 Place = new Place
                 {

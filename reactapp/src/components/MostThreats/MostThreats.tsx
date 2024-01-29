@@ -27,9 +27,9 @@ export default function MostThreats() {
 
     return (
         <div>
-            <h1>Вот что случилось в прошлом месяце и не должно случиться в этом</h1>
+            <h1>Статистика за прошлый месяц</h1>
             <div className='most-threats-container'>
-                {stats.map((e, i) => <ThreatElement title={e.title} value={e.value} index={i} />)}
+                {stats.map((e, i) => <ThreatElement key={e.id} title={e.title} value={e.value} index={i % 3} />)}
             </div>
         </div>
     )

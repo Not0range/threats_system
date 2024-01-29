@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace webapi.Entities
 {
-    [Table("Microdisstricts")]
+    [Table("Microdistricts")]
     public class Microdistrict
     {
         [Key]

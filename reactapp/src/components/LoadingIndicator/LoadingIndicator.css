@@ -1,0 +1,18 @@
+.loading-indicator {
+    border-top: 2px solid blueviolet;
+    border-right: 2px solid blueviolet;
+    border-radius: 50px;
+    animation: indicator-rotating 700ms ease-in infinite;
+    width: 75px;
+    height: 75px;
+}
+
+@keyframes indicator-rotating {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}

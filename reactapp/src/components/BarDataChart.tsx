@@ -3,9 +3,9 @@ import { KeyValuePair } from "../models/Stats";
 
 export default function BarDataChart(props: IProps) {
     return (
-        <ResponsiveContainer width={props.types.length > 5 ? props.types.length * 100 : '100%'}>
+        <ResponsiveContainer width={props.data.length > 2 ? props.data.length * 150 : '100%'}>
             <BarChart data={props.data}>
-                <XAxis dataKey='key' type="category" style={{ wordWrap: 'break-word' }} />
+                <XAxis dataKey='key' type="category" />
                 <YAxis />
                 <Tooltip />
                 {(props.legendVisible === undefined || props.legendVisible) && <Legend />}

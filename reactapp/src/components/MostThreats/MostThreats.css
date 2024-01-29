@@ -13,6 +13,10 @@
     align-items: center;
     cursor: default;
     user-select: none;
+    min-width: 100px;
+    width: 10vw;
+    text-align: center;
+    justify-content: center;
 }
 
 .summary-elem0 {

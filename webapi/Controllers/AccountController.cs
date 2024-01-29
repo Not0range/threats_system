@@ -36,7 +36,7 @@ namespace webapi.Controllers
         }
 
         [HttpPost("[action]")]
-        public async Task<ActionResult> Login([FromForm] LoginModel login)
+        public async Task<ActionResult<UserModel>> Login([FromForm] LoginModel login)
         {
             var user = await _ctx.Users.AsNoTracking().FirstOrDefaultAsync(t =>
                 t.Username.ToLower() == login.Username.ToLower());
@@ -63,7 +63,11 @@ namespace webapi.Controllers
                 {
                     ExpiresUtc = DateTimeOffset.UtcNow.AddDays(1)
                 });
-            return Ok();
+            return new UserModel
+            {
+                Username = user.Username,
+                Role = user.Role,
+            };
         }
 
         [HttpGet("[action]"), Authorize]

@@ -1,7 +1,7 @@
 import { useState } from "react";
-import './HeaderButton.css';
+import './MainButton.css';
 
-export default function LoginButton({ text, onClick }: IProps) {
+export default function MainButton({ text, onClick }: IProps) {
     const [pushed, setPushed] = useState(false);
     return (
         <div

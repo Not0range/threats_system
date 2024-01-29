@@ -1,0 +1,47 @@
+.tab-panel {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+}
+
+.tab-panel>div {
+    height: 30px;
+    cursor: pointer;
+    user-select: none;
+    flex-grow: 1;
+    text-align: center;
+    border-bottom: none;
+    padding: 5px 10px;
+    border-radius: 15px 15px 0px 0;
+    animation: tab-animation-r 200ms both;
+    box-shadow: 0 0 5px black, inset 0 0 15px 3px rgba(0, 0, 0, 0.5);
+}
+
+.tab-panel>div.selected {
+    animation: tab-animation 200ms both;
+}
+
+.tab-panel>div:hover {
+    animation: tab-animation 200ms both;
+}
+
+@keyframes tab-animation {
+    from {
+        box-shadow: 0 0 5px black, inset 0 -2px 15px 3px rgba(0, 0, 0, 0.5);
+    }
+
+    to {
+        box-shadow: 0 0 5px black;
+    }
+}
+
+@keyframes tab-animation-r {
+    from {
+        box-shadow: 0 0 5px black;
+    }
+
+    to {
+        box-shadow: 0 0 5px black, inset 0 -2px 15px 3px rgba(0, 0, 0, 0.5);
+    }
+}

@@ -136,6 +136,7 @@ export default function SummarySection() {
                     data={perDate}
                     types={filtered.map(t => t.title)}
                     limits={limits}
+                    legendVisible={false}
                 />
             </div>
             <table className='summary-table'>

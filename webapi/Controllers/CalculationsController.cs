@@ -147,14 +147,36 @@ namespace webapi.Controllers
                 .Select(t => new Pair(t.Title, 0)).ToListAsync();
             var comparer = new PairComparer();
 
+            var threats = r.Select(t => new StatsItem
+            {
+                Key = t.Key,
+                Values = t.Values.Union(zeroValues, comparer).OrderBy(t => t.Key)
+            });
+
+            IEnumerable<StatsItem> lim = null;
+            if (form.Axis == Axis.Date && (form.MicrodistrictId.HasValue || form.CityId.HasValue))
+            {
+                int id;
+                if (form.MicrodistrictId.HasValue)
+                    id = (await _ctx.Microdistricts.FirstAsync(t => t.Id == form.MicrodistrictId.Value)).CityId;
+                else
+                    id = form.CityId.Value;
+
+                var limits = await _ctx.Limits.Include(t => t.Type).OrderBy(t => t.Date).Where(t => t.CityId == id).ToListAsync();
+                lim = r.Select(t => new StatsItem
+                {
+                    Key = t.Key,
+                    Values = limits.Where(t2 => t2.Date < DateTimeOffset.Parse(t.Key))
+                    .GroupBy(t => t.Type).Select(t => new Pair(t.Key.Title, t.MaxBy(t2 => t2.Date).Value))
+                    .Union(zeroValues, comparer).OrderBy(t => t.Key)
+                });
+            }
+
             return new StatsModel
             {
                 Query = form,
-                Threats = r.Select(t => new StatsItem
-                {
-                    Key = t.Key,
-                    Values = t.Values.Union(zeroValues, comparer).OrderBy(t => t.Key)
-                })
+                Threats = threats,
+                Limits = lim
             };
         }
 
@@ -171,45 +193,55 @@ namespace webapi.Controllers
             await _ctx.Users.AddAsync(new User
             {
                 Username = "admin1",
+                Name = "admin1",
+                Position = "admin1",
                 Password = hash
             });
             await _ctx.SaveChangesAsync();
             _logger.LogWarning("User added");
 
-            var dir = new DirectoryInfo(@"InitialData\Districts");
-            await _ctx.Districts.AddRangeAsync(dir.GetFiles()
-                .Select(t => new District
-                {
-                    Title = Regex.Match(t.Name, @"^\d\.(.+)\.txt$").Groups[1].Value,
-                    SvgTag = ""
-                }));
+            await _ctx.Districts.AddRangeAsync((await System.IO.File.ReadAllLinesAsync(@"InitialData\districts.txt")).Select(t => new District
+            {
+                Title = t.Split('\t')[0],
+                SvgTag = t.Split('\t')[1],
+            }));
             await _ctx.SaveChangesAsync();
             _logger.LogWarning("Districts added");
 
+            var dir = new DirectoryInfo(@"InitialData\Districts");
             foreach (var file in dir.GetFiles())
             {
                 await _ctx.Cities.AddRangeAsync((await System.IO.File.ReadAllLinesAsync(file.FullName)).Select(t => new City
                 {
                     DistrictId = int.Parse(file.Name.Substring(0, file.Name.IndexOf("."))),
-                    Title = t,
-                    SvgTag = ""
+                    Title = t.Split('\t')[0],
+                    SvgTag = t.Split('\t')[1]
                 }));
             }
             await _ctx.SaveChangesAsync();
             _logger.LogWarning("Cities added");
 
-            var c = 1;
+            dir = new DirectoryInfo(@"InitialData\Micro");
             foreach (var file in dir.GetFiles())
             {
                 await _ctx.Microdistricts.AddRangeAsync((await System.IO.File.ReadAllLinesAsync(file.FullName)).Select(t => new Microdistrict
                 {
-                    CityId = c++,
-                    Title = t,
-                    SvgTag = ""
+                    CityId = int.Parse(file.Name.Substring(0, file.Name.IndexOf("."))),
+                    Title = t.Split('\t')[0],
+                    SvgTag = t.Split('\t')[1],
                 }));
             }
             await _ctx.SaveChangesAsync();
-            _logger.LogWarning("Microdistricts added");
+            _logger.LogWarning("Microdistricts added stage 1");
+
+            var cities = await _ctx.Cities.Where(t => t.Id > 2).ToListAsync();
+            await _ctx.Microdistricts.AddRangeAsync(cities.Select(t => new Microdistrict
+            {
+                CityId = t.Id,
+                Title = "Прочие",
+                SvgTag = "",
+            }));
+            _logger.LogWarning("Microdistricts added stage 2");
 
             await _ctx.ThreatsTypes.AddRangeAsync((await System.IO.File.ReadAllLinesAsync(@"InitialData\types.txt")).Select(t => new ThreatsType
             {
@@ -219,28 +251,84 @@ namespace webapi.Controllers
             await _ctx.SaveChangesAsync();
             _logger.LogWarning("Types added");
 
-            var today = DateTime.Today;
-            var temp = new DateTime(today.Year, today.Month, 1).AddDays(-1);
-            var end = new DateTimeOffset(temp).ToUniversalTime();
+            var count = await _ctx.Microdistricts.CountAsync();
+            var end = new DateTimeOffset(DateTime.Today.ToUniversalTime());
             var begin = end.AddYears(-1);
 
             var rand = new Random();
             while (begin < end)
             {
-                var p = rand.Next(5, 20);
+                var p = rand.Next(5, 30);
 
                 for (int i = 0; i < p; i++)
                 {
                     await _ctx.Threats.AddAsync(new Threat
                     {
                         DateTime = begin.AddHours(rand.Next(24)).AddMinutes(rand.Next(60)),
-                        MicrodistrictId = rand.Next(1, c),
+                        MicrodistrictId = rand.Next(1, count + 1),
                         TypeId = rand.Next(1, 7)
                     });
                 }
                 await _ctx.SaveChangesAsync();
                 begin = begin.AddDays(1);
             }
+            _logger.LogWarning("Threats added");
+
+            var limit = await _ctx.ThreatsTypes.Select(t => new { t.Id, Limit = 1.0 / t.Level * 10 }).ToListAsync();
+            await _ctx.Limits.AddRangeAsync(limit.Select(t => new Limit
+            {
+                CityId = 1,
+                TypeId = t.Id,
+                Value = (int)t.Limit,
+                Date = DateTimeOffset.UnixEpoch
+            }));
+            await _ctx.SaveChangesAsync();
+
+            await _ctx.Limits.AddRangeAsync(limit.Select(t => new Limit
+            {
+                CityId = 2,
+                TypeId = t.Id,
+                Value = (int)t.Limit,
+                Date = DateTimeOffset.UnixEpoch
+            }));
+            await _ctx.SaveChangesAsync();
+
+            await _ctx.Limits.AddRangeAsync(limit.Select(t => new Limit
+            {
+                CityId = 1,
+                TypeId = t.Id,
+                Value = (int)(t.Limit * 1.5),
+                Date = end.AddMonths(-6)
+            }));
+            await _ctx.SaveChangesAsync();
+
+            await _ctx.Limits.AddRangeAsync(limit.Select(t => new Limit
+            {
+                CityId = 2,
+                TypeId = t.Id,
+                Value = (int)(t.Limit * 1.2),
+                Date = end.AddMonths(-6)
+            }));
+            await _ctx.SaveChangesAsync();
+
+            await _ctx.Limits.AddRangeAsync(limit.Select(t => new Limit
+            {
+                CityId = 1,
+                TypeId = t.Id,
+                Value = (int)(t.Limit * 0.9),
+                Date = end.AddMonths(-2)
+            }));
+            await _ctx.SaveChangesAsync();
+
+            await _ctx.Limits.AddRangeAsync(limit.Select(t => new Limit
+            {
+                CityId = 2,
+                TypeId = t.Id,
+                Value = (int)t.Limit,
+                Date = end.AddMonths(-2)
+            }));
+            await _ctx.SaveChangesAsync();
+            _logger.LogWarning("Limits added");
 
             return Ok();
         }

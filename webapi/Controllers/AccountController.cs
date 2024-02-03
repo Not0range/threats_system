@@ -31,12 +31,14 @@ namespace webapi.Controllers
             {
                 Id = t.Id,
                 Username = t.Username,
+                Name = t.Name,
+                Position = t.Position,
                 Role = t.Role,
             }).ToListAsync();
         }
 
         [HttpPost("[action]")]
-        public async Task<ActionResult<UserModel>> Login([FromForm] LoginModel login)
+        public async Task<ActionResult<FullUserModel>> Login([FromForm] LoginModel login)
         {
             var user = await _ctx.Users.AsNoTracking().FirstOrDefaultAsync(t =>
                 t.Username.ToLower() == login.Username.ToLower());
@@ -63,9 +65,12 @@ namespace webapi.Controllers
                 {
                     ExpiresUtc = DateTimeOffset.UtcNow.AddDays(1)
                 });
-            return new UserModel
+            return new FullUserModel
             {
+                Id = user.Id,
                 Username = user.Username,
+                Name = user.Name,
+                Position = user.Position,
                 Role = user.Role,
             };
         }
@@ -79,7 +84,7 @@ namespace webapi.Controllers
         }
 
         [HttpGet("[action]"), Authorize]
-        public async Task<ActionResult<UserModel>> Check()
+        public async Task<ActionResult<FullUserModel>> Check()
         {
             if (UserId == null) return BadRequest();
 
@@ -89,9 +94,12 @@ namespace webapi.Controllers
                 await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
                 return Unauthorized();
             }
-            return new UserModel
+            return new FullUserModel
             {
+                Id = user.Id,
                 Username = user.Username,
+                Name = user.Name,
+                Position = user.Position,
                 Role = user.Role,
             };
         }
@@ -111,7 +119,9 @@ namespace webapi.Controllers
 
             var user = new User
             {
-                Username = model.Username,
+                Username = model.Username,//TODO
+                Name = model.Name,
+                Position = model.Position,
                 Password = hash,
                 Role = (UserRole)model.Role
             };
@@ -121,7 +131,36 @@ namespace webapi.Controllers
             return new NewUserModel
             {
                 Username = model.Username,
+                Name = model.Name,
+                Position = model.Position,
                 Password = pass,
+                Role = (UserRole)model.Role
+            };
+        }
+
+        [HttpPost("[action]/{userId}"), Authorize(Roles = "0")]
+        public async Task<ActionResult<UserModel>> Edit(int userId, Models.Input.Optional.UserForm model)
+        {
+            var user = await _ctx.Users.FirstOrDefaultAsync(t => t.Id == userId);
+            if (user == null)
+            {
+                await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+                return NotFound();
+            }
+
+            if (!string.IsNullOrWhiteSpace(model.Username))
+                user.Username = model.Username;
+            if (!string.IsNullOrWhiteSpace(model.Name))
+                user.Name = model.Name;
+            if (!string.IsNullOrWhiteSpace(model.Position))
+                user.Position = model.Position;
+            await _ctx.SaveChangesAsync();
+
+            return new UserModel
+            {
+                Username = model.Username,
+                Name = model.Name,
+                Position = model.Position,
                 Role = (UserRole)model.Role
             };
         }
@@ -153,14 +192,14 @@ namespace webapi.Controllers
             return Ok();
         }
 
-        [HttpGet("[action]"), Authorize(Roles = "0")]
+        [HttpGet("[action]/{userId}"), Authorize(Roles = "0")]
         public async Task<ActionResult<NewUserModel>> ResetPassword(int userId)
         {
             var user = await _ctx.Users.FirstOrDefaultAsync(t => t.Id == userId);
             if (user == null)
             {
                 await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-                return Unauthorized();
+                return NotFound();
             }
 
             var sha = SHA256.Create();
@@ -175,30 +214,11 @@ namespace webapi.Controllers
             return new NewUserModel
             {
                 Username = user.Username,
+                Name = user.Name,
+                Position = user.Position,
                 Password = pass,
                 Role = user.Role
             };
-        }
-
-        [HttpGet("[action]")]
-        public async Task<ActionResult> InitialCreate()
-        {
-            if (await _ctx.Users.AsNoTracking().AnyAsync()) return BadRequest();
-
-            var sha = SHA256.Create();
-            var stream = new MemoryStream(Encoding.UTF8.GetBytes("admin1"));
-            var hash = await sha.ComputeHashAsync(stream);
-            stream.Close();
-
-            var user = new User
-            {
-                Username = "admin1",
-                Password = hash,
-                Role = UserRole.Administrator
-            };
-            await _ctx.Users.AddAsync(user);
-            await _ctx.SaveChangesAsync();
-            return Ok();
         }
 
         private string GenerateString(int count)

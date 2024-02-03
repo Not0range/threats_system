@@ -22,9 +22,9 @@ export default function Header() {
 
     return (
         <div className='main-header'>
-            <Link to={'/'}><img src='/logo192.png' /></Link>
+            <Link to={'/'}><img src='/logo.png' /></Link>
             <div style={{flexGrow: 1}} />
-            <h3>Здравствуйте, {user?.username}</h3>
+            <h3>Здравствуйте, {user?.name}</h3>
             <HeaderButton text='Панель управления' onClick={() => navigate('admin')} />
             <HeaderButton text='Выход' onClick={doLogout} />
         </div>

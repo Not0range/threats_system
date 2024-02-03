@@ -16,6 +16,7 @@ export default function TextInput(props: IProps) {
                 }
                 onFocus={() => setFocused(true)}
                 onBlur={() => setFocused(false)}
+                disabled={props.disabled}
             />
             <p className={focused || props.value ?
                 'placeholder-focused' : undefined}
@@ -24,7 +25,7 @@ export default function TextInput(props: IProps) {
                 {props.placeholder}
             </p>
         </div>
-    )
+    );
 }
 
 interface IProps {
@@ -33,4 +34,5 @@ interface IProps {
     onChanged?: (value: string) => void;
     secure?: boolean;
     error?: boolean;
+    disabled?: boolean;
 }

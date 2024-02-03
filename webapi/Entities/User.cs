@@ -12,6 +12,10 @@ namespace webapi.Entities
         public int Id { get; set; }
         [Required, IndexColumn, MaxLength(50)]
         public string Username { get; set; }
+        [Required, MaxLength(50)]
+        public string Name { get; set; }
+        [Required, MaxLength(50)]
+        public string Position { get; set; }
         [Required]
         public byte[] Password { get; set; }
         [Required]

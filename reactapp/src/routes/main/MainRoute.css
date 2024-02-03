@@ -4,6 +4,10 @@
     padding: 0 10px 0 10px;
 }
 
-.map-section>div {
-    width: 50%;
+.map-section>div:first {
+    width: 40%;
+}
+
+.map-section>div:last-child {
+    width: 60%;
 }

@@ -15,5 +15,6 @@ namespace webapi
         public DbSet<District> Districts { get; set; }
         public DbSet<City> Cities { get; set; }
         public DbSet<Microdistrict> Microdistricts { get; set; }
+        public DbSet<Limit> Limits { get; set; }
     }
 }

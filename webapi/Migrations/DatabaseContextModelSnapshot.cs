@@ -69,6 +69,35 @@ namespace webapi.Migrations
                     b.ToTable("Districts");
                 });
 
+            modelBuilder.Entity("webapi.Entities.Limit", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CityId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset>("Date")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("TypeId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Value")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CityId");
+
+                    b.HasIndex("TypeId");
+
+                    b.ToTable("Limits");
+                });
+
             modelBuilder.Entity("webapi.Entities.Microdistrict", b =>
                 {
                     b.Property<int>("Id")
@@ -92,7 +121,7 @@ namespace webapi.Migrations
 
                     b.HasIndex("CityId");
 
-                    b.ToTable("Microdisstricts");
+                    b.ToTable("Microdistricts");
                 });
 
             modelBuilder.Entity("webapi.Entities.Source", b =>
@@ -128,7 +157,7 @@ namespace webapi.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("DateTime")
+                    b.Property<DateTimeOffset>("DateTime")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<int>("MicrodistrictId")
@@ -179,9 +208,19 @@ namespace webapi.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
                     b.Property<byte[]>("Password")
                         .IsRequired()
                         .HasColumnType("bytea");
+
+                    b.Property<string>("Position")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
                     b.Property<byte>("Role")
                         .HasColumnType("smallint");
@@ -205,6 +244,25 @@ namespace webapi.Migrations
                         .IsRequired();
 
                     b.Navigation("District");
+                });
+
+            modelBuilder.Entity("webapi.Entities.Limit", b =>
+                {
+                    b.HasOne("webapi.Entities.City", "City")
+                        .WithMany()
+                        .HasForeignKey("CityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("webapi.Entities.ThreatsType", "Type")
+                        .WithMany()
+                        .HasForeignKey("TypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("City");
+
+                    b.Navigation("Type");
                 });
 
             modelBuilder.Entity("webapi.Entities.Microdistrict", b =>

@@ -1,4 +1,4 @@
-.dialog-overlay {
+.login-dialog-overlay {
     display: grid;
     top: 0;
     bottom: 0;
@@ -10,7 +10,7 @@
     background-color: rgba(0, 0, 0, 0.5);
 }
 
-.dialog-window {
+.login-dialog-window {
     display: flex;
     flex-direction: column;
     border-radius: 15px;

@@ -62,6 +62,8 @@ namespace webapi.Migrations
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Username = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
+                    Name = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
+                    Position = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                     Password = table.Column<byte[]>(type: "bytea", nullable: false),
                     Role = table.Column<byte>(type: "smallint", nullable: false)
                 },
@@ -120,7 +122,7 @@ namespace webapi.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     TypeId = table.Column<int>(type: "integer", nullable: false),
                     MicrodistrictId = table.Column<int>(type: "integer", nullable: false),
-                    DateTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    DateTime = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     SourceId = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>

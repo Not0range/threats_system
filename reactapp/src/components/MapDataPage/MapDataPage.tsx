@@ -15,16 +15,17 @@ export default function MapDataPage<T>(props: IProps<T>) {
         />
     </div>), [props.setCreating]);
 
-    const creatingTop = useMemo(() => (<div className='map-data-page-top-c'>
-        <MainButton
-            text='Сохранить'
-            onClick={() => props.onSaved && props.onSaved()}
-        />
-        <MainButton
-            text='Отмена'
-            onClick={() => props.onCancel && props.onCancel()}
-        />
-    </div>), [props.onSaved, props.onCancel]);
+    const creatingTop = useMemo(() => (
+        <div className='map-data-page-top-c'>
+            <MainButton
+                text='Сохранить'
+                onClick={() => props.onSaved && props.onSaved()}
+            />
+            <MainButton
+                text='Отмена'
+                onClick={() => props.onCancel && props.onCancel()}
+            />
+        </div>), [props.onSaved, props.onCancel]);
 
     const slice = props.totalPages ? props.items : props.items
         .slice((props.page - 1) * itemPerPage, props.page * itemPerPage);
@@ -40,7 +41,11 @@ export default function MapDataPage<T>(props: IProps<T>) {
 
     return (
         <div className="map-data-page">
-            <MapSection />
+            <MapSection
+                selected={props.selected}
+                zoomed={props.zoomed}
+                onSelected={props.onSelected}
+            />
             {!props.creating ?
                 <div className='map-data-page-list'>
                     {listTop}
@@ -48,7 +53,7 @@ export default function MapDataPage<T>(props: IProps<T>) {
                     <PageControl
                         page={props.page}
                         setPage={props.setPage}
-                        max={props.totalPages ?? Math.ceil(items.length / itemPerPage)}
+                        max={props.totalPages ?? Math.ceil(props.items.length / itemPerPage)}
                     />
                 </div> :
                 <div className='map-data-page-list'>
@@ -89,4 +94,7 @@ interface IProps<T> {
     onEdit?: (value: T) => void;
     onDelete?: (value: T) => void;
     creatingChildren: React.ReactNode;
+    selected?: string;
+    zoomed?: string;
+    onSelected?: (tag?: string) => void;
 }

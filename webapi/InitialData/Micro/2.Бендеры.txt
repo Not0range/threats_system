@@ -1,0 +1,14 @@
+Солнечный	Bendery_solnezni
+Липканы	Bendery_lipkani
+Северный	Bendery_severnuy
+Пентагон	Bendery_pentagon
+Борисовка	Bendery_borysovka
+Хомутановка	Bendery_xomytanovka
+Протягаловка	Bendery_protagalovka
+Балка	Bendery_balka
+Ленинский	Bendery_leninsky
+Центр	Bendery_centr
+Кавказ	Bendery_kazvkaz
+Шёлковый	Bendery_shelkovuy
+Гиска	Bendery_giska
+Прочие	Bendery_full

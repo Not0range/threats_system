@@ -70,7 +70,7 @@ namespace webapi.Controllers
             return await ToOutput(_ctx.Threats.AsNoTracking().Where(t => t.Id == threat.Id)).FirstAsync();
         }
 
-        [HttpDelete, Authorize(Roles = "0")]
+        [HttpDelete("{id}"), Authorize(Roles = "0")]
         public async Task<ActionResult> Delete(int id)
         {
             var threat = await _ctx.Threats.FirstOrDefaultAsync(t => t.Id == id);

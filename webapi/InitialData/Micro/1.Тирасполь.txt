@@ -1,0 +1,15 @@
+Новотираспольский	Tiraspol_newotiraspolsky
+Закрепостная слободка	Tiraspol_zakrepostnaya_slobodka
+Мечникова	Tiraspol_mechnikova
+Западный		Tiraspol_zapadny
+Бородинка	Tiraspol_borodinka
+Белые казармы	Tiraspol_bel_kazarmy
+Кирпичная слободка	Tiraspol_kirpich_slobodka
+Красные казармы	Tiraspol_krasny_kazarmy
+Центр	Tiraspol_centr
+Южный	Tiraspol_uchnuy
+НИИ Сельского хозяйства	Tiraspol_nii_selskogo_xoz
+Октябрьский	Tiraspol_oktabrsky
+Текстильный	Tiraspol_tekstilchik
+Кировский	Tiraspol_kirovskiy
+Прочие	Tiraspol_full

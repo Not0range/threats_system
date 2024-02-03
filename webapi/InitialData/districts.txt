@@ -1,0 +1,7 @@
+Тирасполь	Tiraspol_rayon
+Бендеры	Bendery_rayon
+Слободзейский район	Slobodzea_rayon
+Григориопольский район	Grigoriopolsky_rayon
+Дубоссарский район	Dybossarsky_rayon
+Рыбницкий район	Rybnuzky_rayon
+Каменский район	Kamensky_rayon

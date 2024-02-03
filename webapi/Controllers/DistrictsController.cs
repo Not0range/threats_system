@@ -48,7 +48,7 @@ namespace webapi.Controllers
 
             if (!string.IsNullOrWhiteSpace(model.Title))
             {
-                if (await _ctx.Districts.AnyAsync(t => t.Title.ToLower() == model.Title.ToLower()))
+                if (await _ctx.Districts.Where(t => t.Id != id).AnyAsync(t => t.Title.ToLower() == model.Title.ToLower()))
                     return BadRequest();
                 district.Title = model.Title;
             }

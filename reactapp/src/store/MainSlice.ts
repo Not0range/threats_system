@@ -8,11 +8,13 @@ export const mainSlice = createSlice({
     initialState: {
         types: [],
         loading: true,
-        places: []
+        places: [],
+        activeTypes: []
     } as IState,
     reducers: {
         setTypes: (state, action: PayloadAction<ThreatType[]>) => {
             state.types = action.payload;
+            state.activeTypes = action.payload.map(e => true);
         },
         setLoading: (state, action: PayloadAction<boolean>) => {
             state.loading = action.payload;
@@ -23,6 +25,9 @@ export const mainSlice = createSlice({
         setPlaces: (state, action: PayloadAction<DistrictInfo[]>) => {
             state.places = action.payload;
         },
+        setActive: (state, action: PayloadAction<{index: number, active: boolean}>) => {
+            state.activeTypes[action.payload.index] = action.payload.active;
+        }
     }
 });
 
@@ -31,6 +36,7 @@ interface IState {
     currentUser?: User;
     loading: boolean;
     places: DistrictInfo[];
+    activeTypes: boolean[];
 }
 
-export const { setTypes, setLoading, setCurrentUser, setPlaces } = mainSlice.actions;
+export const { setTypes, setLoading, setCurrentUser, setPlaces, setActive } = mainSlice.actions;

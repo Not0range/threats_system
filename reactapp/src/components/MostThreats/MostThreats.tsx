@@ -8,8 +8,8 @@ export default function MostThreats() {
     const [stats, setStats] = useState<Threat[]>([]);
 
     useEffect(() => {
-        const begin = moment.utc().set({ hour: 0, minute: 0, second: 0, millisecond: 0 }).subtract(1, 'month').startOf('month');
-        const end = moment.utc().set({ hour: 0, minute: 0, second: 0, millisecond: 0 }).startOf('month');
+        const begin = moment.utc().startOf('day').subtract(1, 'month').startOf('month');
+        const end = moment.utc().startOf('day').startOf('month');
 
         $.ajax('api/calculations/summary', {
             method: 'POST',
@@ -26,8 +26,8 @@ export default function MostThreats() {
     }, []);
 
     return (
-        <div>
-            <h1>Статистика за прошлый месяц</h1>
+        <div className='most-threats-div'>
+            <h1>Общая статистика за прошлый месяц</h1>
             <div className='most-threats-container'>
                 {stats.map((e, i) => <ThreatElement key={e.id} title={e.title} value={e.value} index={i % 3} />)}
             </div>

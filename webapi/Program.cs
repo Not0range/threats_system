@@ -23,7 +23,6 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 
 builder.Services.AddDbContext<DatabaseContext>(option =>
     option.UseNpgsql(builder.Configuration.GetConnectionString("Database"))
-    //option.UseSqlite(builder.Configuration.GetConnectionString("Database"))
 );
 builder.Services.AddLogging();
 
@@ -41,13 +40,11 @@ else
 }
 
 
-app.UseHttpsRedirection();
-
 app.UseAuthorization();
 app.UseAuthorization();
 
 app.MapControllers();
 if (!app.Environment.IsDevelopment())
-    app.MapFallbackToFile("/index.html");
+    app.MapFallbackToFile("index.html");
 
 app.Run();

@@ -5,7 +5,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
 <Project>
   <PropertyGroup>
     <_PublishTargetUrl>D:\Projects\Visual Studio\ThreatsSystem\webapi\bin\Release\net7.0\publish\</_PublishTargetUrl>
-    <History>True|2023-05-09T17:57:53.2244905Z;</History>
+    <History>True|2024-02-03T04:45:33.3296889Z;True|2024-02-03T06:44:42.6415698+02:00;True|2024-02-03T06:39:45.6780166+02:00;True|2024-02-03T06:34:23.5572915+02:00;True|2024-02-03T06:32:23.1502881+02:00;True|2023-05-09T20:57:53.2244905+03:00;</History>
     <LastFailureDetails />
   </PropertyGroup>
 </Project>

@@ -1,0 +1,13 @@
+.selected {
+    stroke: black !important;
+    stroke-width: 2px !important;
+    stroke-dasharray: none !important;
+}
+
+g>*:hover {
+    fill: lightgray !important;
+}
+
+g.hidden {
+    display: none !important;
+}

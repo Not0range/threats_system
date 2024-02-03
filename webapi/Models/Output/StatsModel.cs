@@ -6,6 +6,7 @@ namespace webapi.Models.Output
     {
         public QueryForm Query { get; set; }
         public IEnumerable<StatsItem> Threats { get; set; }
+        public IEnumerable<StatsItem> Limits { get; set; }
     }
 
     public class StatsItem

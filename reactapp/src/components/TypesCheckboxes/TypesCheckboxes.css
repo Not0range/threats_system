@@ -1,0 +1,11 @@
+.checkboxes-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.checkboxes-container>div {
+    display: flex;
+    padding-right: 10px;
+    user-select: none;
+}

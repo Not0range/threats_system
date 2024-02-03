@@ -7,6 +7,7 @@ export interface DistrictInfo {
 
 export interface CityInfo {
     id: number;
+    districtId: number;
     title: string;
     svgTag: string;
     microdistricts: MicrodistrictInfo[];
@@ -14,6 +15,7 @@ export interface CityInfo {
 
 export interface MicrodistrictInfo {
     id: number;
+    cityId: number;
     title: string;
     svgTag: string;
 }

@@ -15,7 +15,7 @@
     border-collapse: collapse;
     align-self: flex-end;
     width: 80%;
-    margin: 0 10px;
+    margin: 20px 10px;
 }
 
 .summary-table * {

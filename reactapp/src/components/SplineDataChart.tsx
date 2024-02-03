@@ -15,7 +15,7 @@ export default function SplineDataChart(props: IProps) {
         <ResponsiveContainer aspect={2} width={'100%'} height={'unset'}>
             <LineChart
                 data={data}
-                margin={{ bottom: 2, top: 2, left: 2, right: 2 }}
+                margin={{ bottom: 16, top: 2, left: 2, right: 2 }}
             >
                 <XAxis dataKey={t => t.key} unit={props.unit} />
                 <YAxis />

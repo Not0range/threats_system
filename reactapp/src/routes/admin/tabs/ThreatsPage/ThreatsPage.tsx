@@ -9,6 +9,7 @@ import ComboBox from '../../../../components/ComboBox/ComboBox';
 import DateTimeInput from '../../../../components/DateTimeInput/DateTimeInput';
 import Alert from '../../../../components/Alert/Alert';
 import { CityInfo, MicrodistrictInfo } from '../../../../models/PlaceModels';
+import moment from 'moment';
 
 export default function ThreatsPage() {
     const types = useAppSelector(state => state.main.types);
@@ -167,7 +168,7 @@ export default function ThreatsPage() {
                             onChanged={setPhone}
                         />
                         <TextInput
-                            placeholder="Адресс"
+                            placeholder="Адрес"
                             value={address}
                             onChanged={setAddress}
                         />
@@ -179,7 +180,7 @@ export default function ThreatsPage() {
                 }
                 items={threats}
                 keySelector={(e) => `c${e.id}`}
-                titleSelector={(e) => `${e.type.title} - ${e.place.cityTitle} - ${e.dateTime}`}
+                titleSelector={(e) => `${e.type.title} - ${e.place.cityTitle} - ${moment(e.dateTime).utc().format('DD.MM.y HH:mm')}`}
                 selected={creating ? svg : undefined}
                 onSelected={mapSelect}
                 zoomed={creating ? zoomedC ?? zoomedD : undefined}

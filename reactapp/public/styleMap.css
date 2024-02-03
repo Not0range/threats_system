@@ -1,6 +1,5 @@
 .selected {
     stroke: black !important;
-    stroke-width: 2px !important;
     stroke-dasharray: none !important;
 }
 
